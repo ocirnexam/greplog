@@ -30,6 +30,10 @@ void Search_destroy(Search* s)
 		{
 			free(s->search_attributes);
 		}
+		if(s->all_search_attributes_string)
+		{
+			free(s->all_search_attributes_string);
+		}
 		free(s);
 	}
 }
