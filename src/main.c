@@ -3,14 +3,13 @@
 #include <string.h>
 #include <errno.h>
 #include <stdint.h>
+#include "parameters/parameters.h"
 
 #define DATA_LENGTH 500
 
 typedef struct {
 	FILE* logfiles;
-	char** search_attributes;
-	char* all_search_attributes_string;
-	int search_attr_count;
+	Parameter* parameter;
 } Search;
 
 void Search_destroy(Search* s)
@@ -20,19 +19,6 @@ void Search_destroy(Search* s)
 		if(s->logfiles)
 		{
 			fclose(s->logfiles);
-		}
-		for(int i = 0; i < s->search_attr_count; i++)
-		{
-			if(s->search_attributes[i])
-				free(s->search_attributes[i]);
-		}
-		if(s->search_attributes)
-		{
-			free(s->search_attributes);
-		}
-		if(s->all_search_attributes_string)
-		{
-			free(s->all_search_attributes_string);
 		}
 		free(s);
 	}
@@ -47,45 +33,23 @@ void safe_exit(Search* s, char* message)
 
 Search* Search_initialize(int argc, char* argv[])
 {
-	Search* s = malloc(sizeof(Search));
+	Parameter* param = Parameter_create(argc, argv);
+	if(!param)
+	{
+		return NULL;
+	}
 	char* home_dir = getenv("HOME");
 	char* filename = "/.logfind";
-	size_t full_string_length = 0;
+	Search* s = malloc(sizeof(Search));
 	if (!s)
 	{
 		safe_exit(s, "Failed to allocate memory");
 	}
+	s->parameter = param;
 	s->logfiles = fopen(strcat(home_dir, filename), "r+");
 	if (!s->logfiles)
 	{
 		safe_exit(s, "Failed to open ~/.logfind");
-	}
-	// executable does not need to be stored
-	s->search_attributes = malloc(sizeof(char*) * (argc - 1));
-	s->search_attr_count = argc - 1;
-	if(!s->search_attributes)
-	{
-		safe_exit(s, "Failed to allocate memory");
-	}
-	// starting at 1 to remove name of executable
-	for(int i = 1; i < argc; i++)
-	{
-		s->search_attributes[i - 1] = malloc(DATA_LENGTH);
-		memcpy(s->search_attributes[i - 1], argv[i], DATA_LENGTH);
-		full_string_length += strlen(argv[i]);
-	}
-	s->all_search_attributes_string = malloc(sizeof(char) * full_string_length + argc);
-	if(!s->all_search_attributes_string)
-	{
-		safe_exit(s, "Failed to allocate memory");
-	}
-	for(int i = 1; i < argc; i++)
-	{
-		strncat(s->all_search_attributes_string, argv[i], strlen(argv[i]));
-		if(i < argc - 1)
-		{
-			strncat(s->all_search_attributes_string, " ", 2);
-		}
 	}
 	return s;
 }
@@ -117,16 +81,16 @@ void Search_logfiles(Search* search)
 			line[strcspn(filename, "\r\n")] = 0;
 			line_count++;
 			search_attributes_found = 0;
-			for(i = 0; i < search->search_attr_count; i++)
+			for(i = 0; i < Parameter_get_nr_of_parameters(search->parameter); i++)
 			{
-				if(strstr(line, search->search_attributes[i]) != NULL)
+				if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
 				{
 					search_attributes_found += 1;
 				}
 			}
-			if (search_attributes_found == search->search_attr_count)
+			if (search_attributes_found == Parameter_get_nr_of_parameters(search->parameter))
 			{
-				printf("%s: %s:%d\n", search->all_search_attributes_string, filename, line_count);
+				printf("%s: %s:%d\n", Parameter_to_string(search->parameter), filename, line_count);
 			}
 		}
 		fclose(logfile);
@@ -144,6 +108,7 @@ int main(int argc, char* argv[])
 	Search* search = Search_initialize(argc, argv);
 	Search_logfiles(search);
 
+	Parameter_destroy(search->parameter);
 	Search_destroy(search);
 	return 0;
 }

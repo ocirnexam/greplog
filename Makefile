@@ -1,7 +1,17 @@
-CFLAGS=-Wall -g
+CFLAGS=-Wall
+BUILDDIR := build
+DEBUGDIR := debug
 
-all:
-	gcc -o logfind $(CFLAGS) src/main.c
+SRCS := $(shell find src -name '*.c')
+
+main: src/main.c
+	mkdir -p $(BUILDDIR)
+	gcc $(CFLAGS) -o $(BUILDDIR)/logfind $(SRCS)
+
+debug: src/main.c
+	mkdir -p $(DEBUGDIR)
+	gcc $(CFLAGS) -g -o $(DEBUGDIR)/logfind $(SRCS)
 
 clean:
-	rm -f logfind
+	rm -r $(BUILDDIR)
+	rm -r $(DEBUGDIR)
