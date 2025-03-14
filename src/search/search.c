@@ -23,7 +23,7 @@ static void search_with_or(Search* search, char* line, char* filename, int line_
 	{
 		if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
 		{
-		printf("%s: %s:%d\n", Parameter_get(search->parameter, i), filename, line_count);
+			printf("%s: %s:%d\n", Parameter_get(search->parameter, i), filename, line_count);
 		}
 	}
 }
