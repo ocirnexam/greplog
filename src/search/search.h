@@ -15,7 +15,7 @@ typedef struct {
 	Parameter* parameter;
 } Search;
 
-Search* Search_create(int argc, char* argv[]);
+Search* Search_create(int argc, char* argv[], SearchOption so);
 void Search_analyse_logfiles(Search* search);
 void Search_destroy(Search* search);
 

@@ -1,5 +1,33 @@
 #include "search.h"
 
+static void search_with_and(Search* search, char* line, char* filename, int line_count)
+{
+
+	int search_attributes_found = 0;
+	for(int i = 0; i < Parameter_get_nr_of_parameters(search->parameter); i++)
+	{
+		if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
+		{
+			search_attributes_found += 1;
+		}
+	}
+	if (search_attributes_found == Parameter_get_nr_of_parameters(search->parameter))
+	{
+		printf("%s: %s:%d\n", Parameter_to_string(search->parameter), filename, line_count);
+	}
+}
+
+static void search_with_or(Search* search, char* line, char* filename, int line_count)
+{
+	for(int i = 0; i < Parameter_get_nr_of_parameters(search->parameter); i++)
+	{
+		if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
+		{
+			printf("%s: %s:%d\n", Parameter_get(search->parameter, i), filename, line_count);
+		}
+	}
+}
+
 static void safe_exit(Search* s, char* message)
 {
 	Search_destroy(s);
@@ -23,9 +51,9 @@ void Search_destroy(Search* s)
 	}
 }
 
-Search* Search_create(int argc, char* argv[])
+Search* Search_create(int argc, char* argv[], SearchOption so)
 {
-	Parameter* param = Parameter_create(argc, argv);
+	Parameter* param = Parameter_create(argc, argv, so);
 	if(!param)
 	{
 		return NULL;
@@ -52,7 +80,6 @@ void Search_analyse_logfiles(Search* search)
 	char line[DATA_LENGTH];
 	int line_count = 0;
 	FILE* logfile;
-	int i = 0, search_attributes_found = 0;
 	// loop over all logfiles stored in ~/.logfind
 	while(fgets(filename, DATA_LENGTH, search->logfiles) != NULL)
 	{
@@ -72,17 +99,13 @@ void Search_analyse_logfiles(Search* search)
 			// remove trailing newline
 			line[strcspn(filename, "\r\n")] = 0;
 			line_count++;
-			search_attributes_found = 0;
-			for(i = 0; i < Parameter_get_nr_of_parameters(search->parameter); i++)
+			if(Parameter_get_search_option(search->parameter) == OPTION_AND)
 			{
-				if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
-				{
-					search_attributes_found += 1;
-				}
+				search_with_and(search, line, filename, line_count);
 			}
-			if (search_attributes_found == Parameter_get_nr_of_parameters(search->parameter))
+			else
 			{
-				printf("%s: %s:%d\n", Parameter_to_string(search->parameter), filename, line_count);
+				search_with_or(search, line, filename, line_count);
 			}
 		}
 		fclose(logfile);
