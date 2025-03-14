@@ -37,9 +37,10 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 	else {
-		if (strncmp(second_argument, "-", 2) == 0)
+		if (strncmp(second_argument, "-", 1) == 0)
 		{
 			printf("Invalid Option! Use ./logfind -h for help\n");
+			exit(1);
 		}
 	}
 
