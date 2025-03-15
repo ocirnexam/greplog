@@ -13,7 +13,7 @@ static void search_with_and(Search* search, char* line, char* filename, int line
 	}
 	if (search_attributes_found == Parameter_get_nr_of_parameters(search->parameter))
 	{
-		printf("%s: %s:%d\n", Parameter_to_string(search->parameter), filename, line_count);
+		printf("\e[31m%s\e[0m: %s:\e[32m%d\e[0m:\t%s\n", Parameter_to_string(search->parameter), filename, line_count, line);
 	}
 }
 
@@ -23,7 +23,7 @@ static void search_with_or(Search* search, char* line, char* filename, int line_
 	{
 		if(strstr(line, Parameter_get(search->parameter, i)) != NULL)
 		{
-			printf("%s: %s:%d\n", Parameter_get(search->parameter, i), filename, line_count);
+			printf("\e[31m%s\e[0m: %s:\e[32m%d\e[0m:\t%s\n", Parameter_get(search->parameter, i), filename, line_count, line);
 		}
 	}
 }
