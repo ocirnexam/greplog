@@ -5,7 +5,7 @@
 void print_help(void)
 {
 	char* separator = "------------------------------------------";
-	printf("LOGFIND - Analyse your log files\n%s\n\n", separator);
+	printf("%s\nLOGFIND - Analyse your log files\n%s\n\n", separator, separator);
 	printf("Usage: ./logfind [-o] <search_argument1> <search_argument2> ...\n\n");
 	printf("-h: show this help message\n");
 	printf("-o: arguments are treated as or instead of and\n%s\n", separator);
