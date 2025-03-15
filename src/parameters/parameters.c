@@ -1,4 +1,5 @@
 #include "parameters.h"
+#include <stdio.h>
 
 Parameter* Parameter_create(int argc, char* argv[], SearchOption so)
 {
@@ -30,19 +31,19 @@ Parameter* Parameter_create(int argc, char* argv[], SearchOption so)
 	}
 	for(int i = start; i < argc; i++)
 	{
-		param->parameters[i - start] = malloc(strlen(argv[i]) + 1);
-		memcpy(param->parameters[i - start], argv[i], strlen(argv[i]));
+		param->parameters[i - start] = calloc(sizeof(char), strlen(argv[i]) + 1);
+		memcpy(param->parameters[i - start], argv[i], strlen(argv[i]) + 1);
 		full_string_length += strlen(argv[i]);
 	}
-	param->parameter_string = malloc(sizeof(char) * full_string_length + argc);
+	param->parameter_string = calloc(sizeof(char),full_string_length + (argc - start));
 	if(!param->parameter_string)
 	{
 		return NULL;
 	}
-	for(int i = start; i < argc; i++)
+	for(int i = 0; i < param->nr_of_parameters; i++)
 	{
-		strncat(param->parameter_string, argv[i], strlen(argv[i]));
-		if(i < argc - start)
+		strncat(param->parameter_string, param->parameters[i], strlen(param->parameters[i]) + 1);
+		if(i < param->nr_of_parameters - 1)
 		{
 			strncat(param->parameter_string, " ", 2);
 		}
@@ -52,7 +53,7 @@ Parameter* Parameter_create(int argc, char* argv[], SearchOption so)
 
 char* Parameter_get(Parameter* param, int nr)
 {
-	if(nr <= param->nr_of_parameters)
+	if(nr < param->nr_of_parameters)
 	{
 		return param->parameters[nr];
 	}
