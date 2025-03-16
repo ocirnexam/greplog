@@ -2,7 +2,7 @@ name: logfind
 
 on:
   push:
-    branches: [ "master", "feature/#6-add-tests" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
