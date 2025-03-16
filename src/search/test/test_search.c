@@ -1,4 +1,5 @@
 #include <unity.h>
+#include <stdbool.h>
 #include "search/search.h"
 
 char* argv[] = {"logfind", "hello", "world"};
@@ -23,7 +24,11 @@ void test_search_create(void)
 
 void test_search_analyse_logfiles(void)
 {
-	TEST_ASSERT_EQUAL(1, 1);
+	SearchOption so = OPTION_AND;
+	Search* search = Search_create(argc, argv, so);
+	bool rt = Search_analyse_logfiles(search);
+	TEST_ASSERT_EQUAL(true, rt);
+	Search_destroy(search);	
 }
 
 int main(void)

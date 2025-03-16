@@ -74,18 +74,19 @@ Search* Search_create(int argc, char* argv[], SearchOption so)
 	return s;
 }
 
-void Search_analyse_logfiles(Search* search)
+bool Search_analyse_logfiles(Search* search)
 {
 	char filename[DATA_LENGTH];
 	char line[DATA_LENGTH];
 	int line_count = 0;
 	FILE* logfile;
+	int index_of_newline = 0;
 	// loop over all logfiles stored in ~/.logfind
 	while(fgets(filename, DATA_LENGTH, search->logfiles) != NULL)
 	{
 		// remove trailing newline
 		filename[strcspn(filename, "\r\n")] = 0;
-		logfile = fopen(filename, "r");
+		logfile = fopen(filename, "r+");
 		if(!logfile)
 		{
 			printf("Failed to open logfile (%s)\n", filename);
@@ -97,7 +98,7 @@ void Search_analyse_logfiles(Search* search)
 		while(fgets(line, DATA_LENGTH, logfile) != NULL)
 		{
 			// remove trailing newline
-			line[strcspn(filename, "\r\n")] = 0;
+			line[strcspn(line, "\r\n")] = 0;
 			line_count++;
 			if(Parameter_get_search_option(search->parameter) == OPTION_AND)
 			{
@@ -110,5 +111,6 @@ void Search_analyse_logfiles(Search* search)
 		}
 		fclose(logfile);
 	}
+	return true;
 }
 
