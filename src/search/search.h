@@ -1,6 +1,7 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +17,7 @@ typedef struct {
 } Search;
 
 Search* Search_create(int argc, char* argv[], SearchOption so);
-void Search_analyse_logfiles(Search* search);
+bool Search_analyse_logfiles(Search* search);
 void Search_destroy(Search* search);
 
 #endif

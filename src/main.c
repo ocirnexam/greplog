@@ -46,7 +46,11 @@ int main(int argc, char* argv[])
 
 	// create search and analyse log files
 	Search* search = Search_create(argc, argv, so);
-	Search_analyse_logfiles(search);
+	if(!Search_analyse_logfiles(search))
+	{
+		fprintf(stderr, "[ERROR]: failed to analyse logfiles\n");
+		exit(1);
+	}
 	Search_destroy(search);
 	return 0;
 }

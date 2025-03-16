@@ -9,6 +9,10 @@ argument has to be '-o'.
 
 ```
 git clone git@github.com:ocirnexam/logfind.git
+mkdir build && cd build
+cmake ..
+make
+cd ..
 sudo chmod +x install.sh
 sudo ./install.sh
 ```
