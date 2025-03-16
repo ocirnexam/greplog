@@ -1,6 +1,6 @@
 # Logfind - Analyse your log files
 
-https://github.com/ocirnexam/logfind/actions/workflows/.pipeline.yml/badge.svg
+![main pipeline](https://github.com/ocirnexam/logfind/actions/workflows/.pipeline.yml/badge.svg)
 
 Logfind is a tool that lets you easily analyse your logfiles. Instead of searching in all files for specific search attributes, only log files are considered.
 The logfiles that should be checked are stored in ~/.logfind.
