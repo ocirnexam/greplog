@@ -42,7 +42,7 @@ Parameter* Parameter_create(int argc, char* argv[], SearchOption so)
 	}
 	for(int i = 0; i < param->nr_of_parameters; i++)
 	{
-		strncat(param->parameter_string, param->parameters[i], strlen(param->parameters[i]) + 1);
+		strncat(param->parameter_string, param->parameters[i], full_string_length + (argc - start));
 		if(i < param->nr_of_parameters - 1)
 		{
 			strncat(param->parameter_string, " ", 2);
