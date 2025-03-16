@@ -1,7 +1,7 @@
 #include <string.h>
 #include <unity.h>
 
-#include "../parameters.h"
+#include "parameters/parameters.h"
 
 char* argv1[] = {"logfind", "-o", "test", "args"};
 char* argv2[] = {"logfind", "test", "args"};

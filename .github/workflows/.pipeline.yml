@@ -2,7 +2,7 @@ name: logfind
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "feature/#6-add-tests" ]
   pull_request:
     branches: [ "master" ]
 
@@ -17,6 +17,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Add ~/.logfind
+      run: touch ~/.logfind
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
