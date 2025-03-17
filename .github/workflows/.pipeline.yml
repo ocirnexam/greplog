@@ -1,4 +1,4 @@
-name: logfind
+name: greplog
 
 on:
   push:
