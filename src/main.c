@@ -5,8 +5,8 @@
 void print_help(void)
 {
 	char* separator = "------------------------------------------";
-	printf("%s\nLOGFIND - Analyse your log files\n%s\n\n", separator, separator);
-	printf("Usage: ./logfind [-o] <search_argument1> <search_argument2> ...\n\n");
+	printf("%s\nGREPLOG - Analyse your log files\n%s\n\n", separator, separator);
+	printf("Usage: greplog [-o] <search_argument1> <search_argument2> ...\n\n");
 	printf("-h: show this help message\n");
 	printf("-o: arguments are treated as or instead of and\n%s\n", separator);
 }
@@ -16,17 +16,17 @@ int main(int argc, char* argv[])
 	SearchOption so = OPTION_AND;
 	if (argc < 2)
 	{
-		fprintf(stderr, "[ERROR] Usage: ./logfind [-o] <search_str1> <search_str2> ...\n");
+		fprintf(stderr, "[ERROR] You have to enter at least one search argument!\n\n Type greplog -h for help\n");
 		exit(1);
 	}
-	char* second_argument = argv[1];
+	char* second_argument = argv[1];	
 
 	// check if second_argument is an option
 	if (strncmp(second_argument, "-o", 3) == 0)
 	{
 		if (argc < 3)
 		{
-			fprintf(stderr, "[ERROR] At least one search attribute needed\n");
+			fprintf(stderr, "[ERROR] You have to enter at least one search argument!\n\n Type greplog -h for help\n");
 			exit(1);
 		}
 		so = OPTION_OR;
@@ -37,11 +37,7 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 	else {
-		if (strncmp(second_argument, "-", 1) == 0)
-		{
-			printf("Invalid Option! Use ./logfind -h for help\n");
-			exit(1);
-		}
+		// no default
 	}
 
 	// create search and analyse log files

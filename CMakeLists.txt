@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.25)
-project("logfind")
+project("greplog")
 
 include(CTest)
 
-add_executable(logfind src/main.c
+add_executable(greplog src/main.c
 		       src/search/search.c
 		       src/parameters/parameters.c)
-target_include_directories(logfind PUBLIC src
+target_include_directories(greplog PUBLIC src
 					  src/search
 					  src/parameters)
 

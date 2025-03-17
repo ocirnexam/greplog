@@ -59,7 +59,7 @@ Search* Search_create(int argc, char* argv[], SearchOption so)
 		return NULL;
 	}
 	char* home_dir = getenv("HOME");
-	char* filename = "/.logfind";
+	char* filename = "/.greplog";
 	Search* s = malloc(sizeof(Search));
 	if (!s)
 	{
